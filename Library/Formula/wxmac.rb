@@ -16,9 +16,9 @@ class Wxpython < Formula
 end
 
 class Wxmac < Formula
-  url 'http://downloads.sourceforge.net/project/wxwindows/2.8.11/wxMac-2.8.11.tar.bz2'
+  url 'http://sourceforge.net/projects/wxwindows/files/2.8.12/wxMac-2.8.12.tar.bz2'
   homepage 'http://www.wxwidgets.org'
-  md5 '8d84bfdc43838e2d2f75031f62d1864f'
+  md5 '876000a9a9742c3c75a2597afbcb8856'
 
   def options
     [
