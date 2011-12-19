@@ -21,12 +21,13 @@ class Glib < Formula
     mp = "https://svn.macports.org/repository/macports/trunk/dports/devel/glib2/files/"
     {
       :p0 => [
-        mp+"patch-configure.ac.diff",
-        mp+"patch-glib-2.0.pc.in.diff",
-        mp+"patch-glib_gunicollate.c.diff",
+        mp+"patch-configure.diff",
         mp+"patch-gi18n.h.diff",
+        mp+"patch-gio_gdbusprivate.c.diff",
         mp+"patch-gio_xdgmime_xdgmime.c.diff",
-        mp+"patch-gio_gdbusprivate.c.diff"
+        #        mp+"patch-glib-2.0.pc.in.diff",
+        "https://gist.github.com/raw/1495866/65c355eeeef4796fa63a20e1efc80d7e5c4bd162/patch-glib-2.0.pc.in.diff",
+        mp+"patch-glib_gunicollate.c.diff"
       ]
     }
   end
