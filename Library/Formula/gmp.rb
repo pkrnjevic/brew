@@ -16,7 +16,7 @@ class Gmp < Formula
     # Reports of problems using gcc 4.0 on Leopard
     # https://github.com/mxcl/homebrew/issues/issue/2302
     # Also force use of 4.2 on 10.6 in case a user has changed the default
-    ENV.gcc_4_2
+#    ENV.gcc_4_2
 
     args = ["--prefix=#{prefix}", "--enable-cxx"]
 
