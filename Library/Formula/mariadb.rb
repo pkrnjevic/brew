@@ -3,9 +3,10 @@ require 'formula'
 class Mariadb < Formula
   # You probably don't want to have this and MySQL's formula linked at the same time
   # Just saying.
-  url 'http://ftp.osuosl.org/pub/mariadb/mariadb-5.2.8/kvm-tarbake-jaunty-x86/mariadb-5.2.8.tar.gz'
+  #url 'http://ftp.osuosl.org/pub/mariadb/mariadb-5.2.8/kvm-tarbake-jaunty-x86/mariadb-5.2.8.tar.gz'
+  url 'http://nfl/mariadb-5.3.5.tar.gz'
   homepage 'http://mariadb.org/'
-  md5 '7b78be87df6a59ecd7a8c06a7e72eb83'
+  md5 '98ce0441b37c8d681855150495fdc03b'
 
   depends_on 'readline'
 
@@ -33,7 +34,7 @@ class Mariadb < Formula
       "--localstatedir=#{var}/mysql",
       "--sysconfdir=#{etc}",
       "--with-extra-charsets=complex",
-      "--without-readline",
+      "--with-readline",
       "--enable-assembler",
       "--enable-thread-safe-client",
       "--with-big-tables",
