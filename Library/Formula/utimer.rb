@@ -1,9 +1,9 @@
 require 'formula'
 
 class Utimer < Formula
-  url 'http://utimer.codealpha.net/dl.php?file=utimer-0.4.tar.gz'
   homepage 'http://utimer.codealpha.net/utimer/'
-  md5 '5fc82bcea449bdc3527a6833a1196641'
+  url 'http://utimer.codealpha.net/dl.php?file=utimer-0.4.tar.gz'
+  sha1 'b9590ef4ff6bb8ecf64bb703f50f1bfeddf3fbdd'
 
   depends_on 'pkg-config' => :build
   depends_on 'glib'

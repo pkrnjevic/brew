@@ -1,27 +1,19 @@
 require 'formula'
 
 class AtlassianPluginSdk < Formula
-  url 'https://maven.atlassian.com/content/repositories/atlassian-public/com/atlassian/amps/atlassian-plugin-sdk/3.7/atlassian-plugin-sdk-3.7.tar.gz'
   homepage 'https://developer.atlassian.com/display/DOCS/Atlassian+Plugin+SDK+Documentation'
-  md5 '7d019c410b21333be06d00a502cd54d0'
+  url 'https://maven.atlassian.com/content/repositories/atlassian-public/com/atlassian/amps/atlassian-plugin-sdk/4.1.2/atlassian-plugin-sdk-4.1.2.tar.gz'
+  sha1 'b08aa9c68801419ec1d34e450c93ef53108550bc'
 
   def install
     # Remove windows files
     rm_f Dir["bin/*.bat"]
 
-    Dir.chdir "apache-maven/maven-docs" do
-      prefix.install %w{ NOTICE.txt LICENSE.txt README.txt }
-    end
-
     # Install jars in libexec to avoid conflicts
     libexec.install Dir['*']
 
     # Symlink binaries
-    bin.mkpath
-    Dir["#{libexec}/bin/*"].each do |f|
-      ln_s f, bin+File.basename(f)
-    end
-
+    bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   def caveats
@@ -30,7 +22,7 @@ class AtlassianPluginSdk < Formula
       visit https://developer.atlassian.com.
 
       To create a plugin skeleton using atlas-create-APPLICATION-plugin, e.g.:
-        atlas-create-jira-plugin
+        atlas-create-jira-plugin or atlas-create-confluence-plugin
 
       To run your plugin's host application with the plugin skeleton installed:
         atlas-run

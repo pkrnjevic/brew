@@ -1,10 +1,19 @@
 require 'formula'
 
-class GoogleJsTest < Formula
-  url 'http://google-js-test.googlecode.com/files/gjstest-1.0.6.tar.bz2'
-  homepage 'http://code.google.com/p/google-js-test/'
-  sha1 '865abf7913424fe74bde43063759397b99d1986f'
+class NeedsSnowLeopard < Requirement
+  satisfy MacOS.version >= :snow_leopard
 
+  def message
+    "Google JS Test requires Mac OS X 10.6 (Snow Leopard) or newer."
+  end
+end
+
+class GoogleJsTest < Formula
+  homepage 'http://code.google.com/p/google-js-test/'
+  url 'http://google-js-test.googlecode.com/files/gjstest-1.0.8.tar.bz2'
+  sha1 '2209dd0c700f9420e29a844920f8614e3d97156d'
+
+  depends_on NeedsSnowLeopard
   depends_on 'gflags'
   depends_on 'glog'
   depends_on 'protobuf'
@@ -12,9 +21,7 @@ class GoogleJsTest < Formula
   depends_on 'v8'
 
   def install
-    raise 'gjstest requires Snow Leopard or above.' if MacOS.leopard?
-
-    system "make PREFIX=#{prefix}"
-    system "make PREFIX=#{prefix} install"
+    system "make", "PREFIX=#{prefix}"
+    system "make", "PREFIX=#{prefix}", "install"
   end
 end

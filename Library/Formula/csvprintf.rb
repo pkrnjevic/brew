@@ -1,16 +1,13 @@
 require 'formula'
 
 class Csvprintf < Formula
-  url 'http://csvprintf.googlecode.com/files/csvprintf-1.0.tar.gz'
   homepage 'http://code.google.com/p/csvprintf/'
-  md5 '6ad0315064c47a21b06da440d211e5c0'
+  url 'http://csvprintf.googlecode.com/files/csvprintf-1.0.2.tar.gz'
+  sha1 '3ecc01ead2e870c12bd9002c179ed16e9c6fa6bf'
 
   def install
-    args = ["--disable-debug",
-            "--disable-dependency-tracking",
-            "--prefix=#{prefix}"]
-
-    system "./configure", *args
+    system "./configure", "--disable-debug", "--disable-dependency-tracking",
+                          "--prefix=#{prefix}"
     system "make install"
   end
 end

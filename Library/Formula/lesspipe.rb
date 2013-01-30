@@ -2,15 +2,13 @@ require 'formula'
 
 class Lesspipe < Formula
   homepage 'http://www-zeuthen.desy.de/~friebel/unix/lesspipe.html'
-  url 'http://www-zeuthen.desy.de/~friebel/unix/less/lesspipe-1.71.tar.gz'
-  md5 '6d921dc4ce9809d405cb8d694ac7cbbd'
+  url 'http://sourceforge.net/projects/lesspipe/files/lesspipe/1.81/lesspipe-1.81.tar.gz'
+  sha1 '0d6e0ed6465a9186f2d3e912aacafbb5569f8d44'
 
-  def options
-    [['--syntax-highlighting', 'Enable syntax highlighting']]
-  end
+  option 'syntax-highlighting', 'Enable syntax highlighting'
 
   def install
-    if ARGV.include? '--syntax-highlighting'
+    if build.include? 'syntax-highlighting'
       inreplace 'configure', %q{$ifsyntax = "\L$ifsyntax";}, %q{$ifsyntax = "\Ly";}
     end
 

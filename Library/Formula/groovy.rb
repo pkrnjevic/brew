@@ -2,20 +2,17 @@ require 'formula'
 
 class Groovy < Formula
   homepage 'http://groovy.codehaus.org/'
-  url 'http://dist.groovy.codehaus.org/distributions/groovy-binary-1.8.4.zip'
-  md5 '3ecfe663fcdc1d9b54b16e5eabe54c90'
+  url 'http://dist.groovy.codehaus.org/distributions/groovy-binary-2.0.5.zip'
+  sha1 '856839a1cc2517e8879dfa9c9399b22098965009'
 
   def install
-    rm_f Dir["bin/*.bat"]
+    # Don't need Windows files.
+    # Why are icons in bin?
+    rm_f Dir["bin/*.bat","bin/groovy.{icns,ico}"]
 
-    prefix.install %w{ LICENSE.txt NOTICE.txt }
-    libexec.install %w[bin conf lib]
-
-    bin.mkpath
-    Dir["#{libexec}/bin/*"].each do |f|
-      next unless File.extname(f).empty?
-      ln_s f, bin+File.basename(f)
-    end
+    prefix.install_metafiles
+    libexec.install %w(bin conf lib embeddable)
+    bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   def caveats

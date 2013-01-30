@@ -1,19 +1,20 @@
 require 'formula'
 
 class Poco < Formula
-  url 'http://downloads.sourceforge.net/project/poco/sources/poco-1.4.1/poco-1.4.1p1-all.tar.bz2'
   homepage 'http://pocoproject.org/'
-  md5 '5b35baa1bf7ee4b20437b8950a1c5012'
-  version '1.4.1p1'
+  url 'https://github.com/downloads/pocoproject/poco/poco-1.4.5.tar.gz'
+  sha1 'fd19d6d25504f9cdaf345880ddf64aa688dea170'
 
   def install
-    arch = Hardware.is_64_bit? ? 'Darwin64': 'Darwin'
+    arch = Hardware.is_64_bit? ? 'Darwin64': 'Darwin32'
+    arch << '-clang' if ENV.compiler == :clang
 
     system "./configure", "--disable-debug", "--disable-dependency-tracking",
+                          "--prefix=#{prefix}",
                           "--config=#{arch}",
                           "--omit=Data/MySQL,Data/ODBC",
-                          "--prefix=#{prefix}"
-    system "make"
-    system "make install"
+                          "--no-samples",
+                          "--no-tests"
+    system "make install CC=#{ENV.cc} CXX=#{ENV.cxx}"
   end
 end

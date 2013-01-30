@@ -1,43 +1,35 @@
 require 'formula'
 
 class Jruby < Formula
-  url 'http://jruby.org.s3.amazonaws.com/downloads/1.6.5/jruby-bin-1.6.5.tar.gz'
   homepage 'http://www.jruby.org'
-  md5 '54354082673bd115f945890dc6864413'
+  url 'http://jruby.org.s3.amazonaws.com/downloads/1.7.2/jruby-bin-1.7.2.tar.gz'
+  sha1 'a51611bf23993f3b6bb5e781b97100ea99f4e702'
+
+  env :std
 
   def install
     # Remove Windows files
     rm Dir['bin/*.{bat,dll,exe}']
 
     # Prefix a 'j' on some commands
-    Dir.chdir 'bin' do
+    cd 'bin' do
       Dir['*'].each do |file|
-        mv file, "j#{file}" unless file.match /^[j_]/
+        mv file, "j#{file}" unless file.match /^[j]/
       end
     end
 
     # Only keep the OS X native libraries
-    Dir.chdir 'lib/native' do
+    cd 'lib/native' do
       Dir['*'].each do |file|
         rm_rf file unless file.downcase == 'darwin'
       end
     end
 
-    (prefix+'jruby').install Dir['*']
-
-    bin.mkpath
-    Dir["#{prefix}/jruby/bin/*"].each do |f|
-      ln_s f, bin+File.basename(f)
-    end
-  end
-
-  def caveats; <<-EOS.undent
-    Consider using RVM to manage Ruby environments:
-      * RVM: http://rvm.beginrescueend.com/
-    EOS
+    libexec.install Dir['*']
+    bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   def test
-    system "#{bin}/jruby -e 'puts \"hello\"'"
+    system "#{bin}/jruby", "-e", "puts 'hello'"
   end
 end

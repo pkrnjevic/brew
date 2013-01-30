@@ -1,22 +1,15 @@
 require 'formula'
 
 class Jmeter < Formula
-  url 'http://www.apache.org/dyn/closer.cgi?path=jakarta/jmeter/binaries/jakarta-jmeter-2.5.tgz'
-  homepage 'http://jakarta.apache.org/jmeter/'
-  md5 '18035ee0c8bf64792b2710d9ae48b2ac'
-
-  def startup_script name
-    <<-EOS.undent
-      #!/bin/bash
-      exec #{libexec}/bin/#{name} $@
-    EOS
-  end
+  homepage 'http://jmeter.apache.org/'
+  url 'http://www.apache.org/dyn/closer.cgi?path=jmeter/binaries/apache-jmeter-2.8.tgz'
+  sha1 'e18cac4ab2b73dfcfe5d11e857905fa31c638563'
 
   def install
     # Remove windows files
     rm_f Dir["bin/*.bat"]
-    prefix.install %w{ LICENSE NOTICE README }
+    prefix.install_metafiles
     libexec.install Dir['*']
-    (bin+'jmeter').write startup_script('jmeter')
+    bin.write_exec_script libexec/'bin/jmeter'
   end
 end

@@ -1,18 +1,21 @@
 require 'formula'
 
 class Geos < Formula
-  url 'http://download.osgeo.org/geos/geos-3.3.1.tar.bz2'
-  homepage 'http://trac.osgeo.org/geos/'
-  sha1 '4f89e62c636dbf3e5d7e1bfcd6d9a7bff1bcfa60'
+  homepage 'http://trac.osgeo.org/geos'
+  url 'http://download.osgeo.org/geos/geos-3.3.6.tar.bz2'
+  sha1 '454c9b61f158de509db60a69512414a0a1b0743b'
 
-  def skip_clean? path
-    path.extname == '.la'
-  end
-
-  fails_with_llvm "Some symbols are missing during link step."
+  option :universal
 
   def install
-    system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
+    ENV.universal_binary if build.universal?
+    # fixes compile error: missing symbols being optimized out using llvm.
+    if ENV.compiler == :llvm then
+      inreplace 'src/geom/Makefile.in', 'CFLAGS = @CFLAGS@', 'CFLAGS = @CFLAGS@ -O1'
+      inreplace 'src/geom/Makefile.in', 'CXXFLAGS = @CXXFLAGS@', 'CXXFLAGS = @CXXFLAGS@ -O1'
+    end
+
+    system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}"
     system "make install"
   end
 end

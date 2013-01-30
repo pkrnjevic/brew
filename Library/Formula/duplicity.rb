@@ -1,27 +1,28 @@
 require 'formula'
 
 class Duplicity < Formula
-  url 'http://launchpad.net/duplicity/0.6-series/0.6.16/+download/duplicity-0.6.16.tar.gz'
   homepage 'http://www.nongnu.org/duplicity/'
-  md5 '55996756a5bc9743add738cfcba2dda2'
+  url 'http://code.launchpad.net/duplicity/0.6-series/0.6.20/+download/duplicity-0.6.20.tar.gz'
+  sha1 '5781fa325c846fd8453c68a33ede3c7a0d105a80'
 
   depends_on 'librsync'
   depends_on 'gnupg'
 
+  option :universal
+
   def install
-    ENV.universal_binary
+    ENV.universal_binary if build.universal?
     # Install mostly into libexec
     system "python", "setup.py", "install",
                      "--prefix=#{prefix}",
-                     "--install-purelib=#{libexec}",
-                     "--install-platlib=#{libexec}",
+                     "--install-lib=#{libexec}",
                      "--install-scripts=#{bin}"
 
     # Shift files around to avoid needing a PYTHONPATH
-    system "mv #{bin}/duplicity #{bin}/duplicity.py"
-    system "mv #{bin}/* #{libexec}"
-    # Symlink the executables
-    ln_s "#{libexec}/duplicity.py", "#{bin}/duplicity"
-    ln_s "#{libexec}/rdiffdir", "#{bin}/rdiffdir"
+    mv bin+'duplicity', bin+'duplicity.py'
+    mv Dir[bin+'*'], libexec
+
+    bin.install_symlink "#{libexec}/duplicity.py" => "duplicity"
+    bin.install_symlink "#{libexec}/rdiffdir"
   end
 end
