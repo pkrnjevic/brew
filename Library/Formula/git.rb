@@ -17,10 +17,9 @@ class Git < Formula
 
   head 'https://github.com/git/git.git'
 
-  depends_on 'pcre' if build.include? 'with-pcre'
-
   option 'with-blk-sha1', 'Compile with the block-optimized SHA1 implementation'
-  option 'with-pcre', 'Compile with the PCRE library'
+
+  depends_on 'pcre' => :optional
 
   def install
     # If these things are installed, tell Git build system to not use them
@@ -37,7 +36,7 @@ class Git < Formula
 
     ENV['BLK_SHA1'] = '1' if build.include? 'with-blk-sha1'
 
-    if build.include? 'with-pcre'
+    if build.with? 'pcre'
       ENV['USE_LIBPCRE'] = '1'
       ENV['LIBPCREDIR'] = HOMEBREW_PREFIX
     end
@@ -65,12 +64,12 @@ class Git < Formula
       bin.install 'git-subtree'
     end
 
-    # install the completion scripts from 'contrib' first
-    (etc+'bash_completion.d').install 'contrib/completion/git-completion.bash'
-    (etc+'bash_completion.d').install 'contrib/completion/git-prompt.sh'
+    # install the completion script first because it is inside 'contrib'
+    bash_completion.install 'contrib/completion/git-completion.bash'
+    bash_completion.install 'contrib/completion/git-prompt.sh'
 
-    (share+'zsh/site-functions').install 'contrib/completion/git-completion.zsh' => '_git'
-    ln_s "#{etc}/bash_completion.d/git-completion.bash", "#{share}/zsh/site-functions"
+    zsh_completion.install 'contrib/completion/git-completion.zsh' => '_git'
+    ln_sf "#{etc}/bash_completion.d/git-completion.bash", zsh_completion
 
     (share+'git-core').install 'contrib'
 

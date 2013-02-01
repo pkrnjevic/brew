@@ -7,7 +7,6 @@ require 'patches'
 require 'compilers'
 require 'build_environment'
 require 'build_options'
-require 'extend/set'
 
 
 class Formula
@@ -136,6 +135,9 @@ class Formula
   def etc; HOMEBREW_PREFIX+'etc' end
   # generally we don't want var stuff inside the keg
   def var; HOMEBREW_PREFIX+'var' end
+
+  def bash_completion; prefix+'etc/bash_completion.d' end
+  def zsh_completion;  share+'zsh/site-functions'     end
 
   # override this to provide a plist
   def plist; nil; end
@@ -287,6 +289,18 @@ class Formula
     ]
   end
 
+  def ruby_bin
+    '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin'
+  end
+
+  def rake *args
+    system "#{ruby_bin}/rake", *args
+  end
+
+  def ruby
+    system "#{ruby_bin}/ruby", *args
+  end
+
   def self.class_s name
     #remove invalid characters and then camelcase it
     name.capitalize.gsub(/[-_.\s]([a-zA-Z0-9])/) { $1.upcase } \
@@ -379,7 +393,8 @@ class Formula
       install_type = :from_url
     elsif name.match bottle_regex
       bottle_filename = Pathname(name).realpath
-      name = bottle_filename.basename.to_s.rpartition('-').first
+      version = Version.parse(bottle_filename).to_s
+      name = bottle_filename.basename.to_s.rpartition("-#{version}").first
       path = Formula.path(name)
       install_type = :from_local_bottle
     else
@@ -473,10 +488,8 @@ class Formula
   end
 
   # The full set of Requirements for this formula's dependency tree.
-  def recursive_requirements
-    reqs = ComparableSet.new
-    recursive_dependencies.each { |d| reqs.merge d.to_formula.requirements }
-    reqs.merge requirements
+  def recursive_requirements(&block)
+    Requirement.expand(self, &block)
   end
 
   def to_hash
