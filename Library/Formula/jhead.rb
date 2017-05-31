@@ -2,8 +2,8 @@ require 'formula'
 
 class Jhead < Formula
   homepage 'http://www.sentex.net/~mwandel/jhead/'
-  url 'http://www.sentex.net/~mwandel/jhead/jhead-2.96.tar.gz'
-  sha1 '668a515276654247e6fbe7a6193a5e1382a38116'
+  url 'http://www.sentex.net/~mwandel/jhead/jhead-3.00.tar.gz'
+  sha1 '6bd3faa38cc884b5370e8e8f15bc10cbb706ec7a'
 
   def install
     system "make"
